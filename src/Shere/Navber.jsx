@@ -39,7 +39,7 @@ const Navber = () => {
         </div>
         <div className="hidden lg:flex w-[70%]">
           <ul className="w-full flex gap-3 items-center justify-end text-lg">
-            <Link>About</Link>
+            <Link to="/">Home</Link>
             <Link>Skill</Link>
             {user ? (
               <>
