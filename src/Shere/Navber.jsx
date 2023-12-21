@@ -1,16 +1,14 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthCreate } from "./Auth/AuthContext";
+import Auth from "./Auth/Auth";
 
 const Navber = () => {
-  const {name} = useContext(AuthCreate)
-  console.log(name);
+  const { user,logOut } = Auth();
   return (
     <div
       className={`border-b border-[#3D8AD0] bg-gradient-to-r from-[#07163d] to-[#3D8AD0] shadow sticky top-0 left-0`}
     >
       <div className="flex items-center justify-between lg:py-3 text-white md:w-11/12 mx-auto">
-        <div className="py-2  flex justify-between items-center w-[92%] mx-auto flex-row-reverse lg:flex-row">
+        <div className="py-2  flex justify-start items-center w-[90%] lg:w-[30%]  mx-auto flex-row-reverse lg:flex-row">
           <div className="block lg:hidden ">
             <div className="drawer drawer-end">
               <input
@@ -33,37 +31,43 @@ const Navber = () => {
                   <li className="flex justify-center items-center w-full">
                     ghgh
                   </li>
-                  
                 </ul>
               </div>
             </div>
           </div>
           <h1 className="text-xl font-medium tracking-[3px]">Priority Pulse</h1>
         </div>
-        <div className="hidden lg:flex">
-          <ul className="flex gap-3 items-center text-lg">
-            <Link>
-              About
-            </Link>
-            <Link>
-              Skill
-            </Link>
-            <Link>
-              Projects
-            </Link>
-            <Link
-              to="https://drive.google.com/file/d/125ZZ5dx_Oz4RqkutuUOMfiBe6xfv6UJu/view?usp=sharing"
-              title="Show Resume"
-            >
-              <button className="resume px-5 py-1">
-                <span className="circle1"></span>
-                <span className="circle2"></span>
-                <span className="circle3"></span>
-                <span className="circle4"></span>
-                <span className="circle5"></span>
-                <span className="text"> Resume</span>
-              </button>
-            </Link>
+        <div className="hidden lg:flex w-[70%]">
+          <ul className="w-full flex gap-3 items-center justify-end text-lg">
+            <Link>About</Link>
+            <Link>Skill</Link>
+            {user ? (
+              <>
+                <div className=" border border-[#01040a] rounded-[50%] w-[40px] h-[40px]">
+                <img src={user.photoURL} title={user.email} className="w-full h-full rounded-[50%]"/>
+                </div>
+                <button onClick={logOut}
+                  className="py-1 px-5 bg-[#07163d] hover:bg-[#01040a] rounded"
+                >
+                  Log Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="py-1 px-5 bg-[#07163d] hover:bg-[#01040a] rounded"
+                >
+                  Log In
+                </Link>
+                <Link
+                  to="/signUp"
+                  className="py-1 px-5 bg-[#07163d] hover:bg-[#01040a] rounded"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </ul>
         </div>
       </div>
