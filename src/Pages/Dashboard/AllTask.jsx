@@ -1,19 +1,47 @@
 import { useEffect, useState } from "react";
 import useAxios from "../../Shere/Hoot/useAxios";
 import { Link } from "react-router-dom";
+import DragDndDrop from "../../companent/DragDndDrop";
+import { useDrop } from "react-dnd";
+import Auth from "../../Shere/Auth/Auth";
 
 const AllTask = () => {
+
   const [alltask, setAllTask] = useState([]);
+  const [team, setTeam] = useState([]);
   const axiosSecure = useAxios();
+  const {user} = Auth()
   useEffect(() => {
-    axiosSecure.get("/alltask").then((result) => {
+    axiosSecure.get(`/alltask?email=${user?.email}`).then((result) => {
       setAllTask(result.data);
     });
-  }, [axiosSecure]);
-  console.log(alltask);
+  }, [axiosSecure,user]);
+//   drag and  drop 
+
+  const [{ isOver }, addToTeamRef] = useDrop({
+    accept: "player",
+    collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  });
+
+  console.log(isOver);
+  const [{ isOver: isPlayerOver }, removeFromTeamRef] = useDrop({
+    accept: "team",
+    collect: (monitor) => ({ isOver: !!monitor.isOver() }),
+  });
+console.log(isPlayerOver);
+  const movePlayerToTeam = (item) => {
+    console.log(item);
+    setAllTask((prev) => prev.filter((_, i) => item.index !== i));
+    setTeam((prev) => [...prev, item]);
+  };
+  const removePlayerFromTeam = (item) => {
+    setTeam((prev) => prev.filter((_, i) => item.index !== i));
+    setAllTask((prev) => [...prev, item]);
+  };
+
   return (
     <div
-      className="w-full h-screen "
+      className="w-full bg-scroll h-screen"
       style={{
         backgroundImage:
           "url(https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTh8fGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D)",
@@ -43,41 +71,15 @@ const AllTask = () => {
             <h1 className="text-xl font-medium text-center text-white">
               Previous tasks
             </h1>
-            <div className="mt-5">
-              {alltask?.map((task) => (
-                <div key={task._id}>
-                  <div className="rounded-md shadow-md bg-white/80 mb-2">
-                    <div className="flex items-center justify-between p-3">
-                      <div className="flex items-center space-x-2">
-                        <img
-                          src={task.user_images}
-                          alt=""
-                          className="object-cover object-center w-8 h-8 rounded-full shadow-sm  "
-                        />
-                        <div className="-space-y-1">
-                          <h2 className="text-sm font-semibold leadi">
-                            {task.user_name}
-                          </h2>
-                          <span className="inline-block text-xs leadi ">
-                            {task.user_email}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="px-4 pb-4 text-black">
-                      <h1 className="text-xl">{task.title}</h1>
-                      <h2 className="text-lg">Priority {task.priority}</h2>
-                      <h2 className="text-sm">
-                        Currend Date{" : "}
-                        {task.current_date}
-                      </h2>
-                      <h2 className="text-sm">
-                        Deadline {" : "}
-                        {task.deadline}
-                      </h2>
-                    </div>
-                  </div>
-                </div>
+            <div className="mt-5" 
+            ref={removeFromTeamRef}>
+              {alltask?.map((task, i) => (
+                <DragDndDrop 
+                item={task}
+                key={i}
+                playerType="player"
+                onDropPlayer={movePlayerToTeam}
+                index={i}/>
               ))}
             </div>
           </div>
@@ -85,7 +87,16 @@ const AllTask = () => {
             <h1 className="text-xl font-medium text-center text-white">
               Ongoing tasks
             </h1>
-            <div className="mt-5"></div>
+            <div className="mt-5" ref={addToTeamRef}>
+            {team?.map((task, i) => (
+                <DragDndDrop 
+                item={task}
+                key={i}
+                index={i}
+                playerType="team"
+                onDropPlayer={removePlayerFromTeam}/>
+              ))}
+            </div>
           </div>
           <div>
             <h1 className="text-xl font-medium text-center text-white">
