@@ -41,7 +41,7 @@ console.log(isPlayerOver);
 
   return (
     <div
-      className="w-full bg-scroll h-screen"
+      className="w-full bg-scroll h-full"
       style={{
         backgroundImage:
           "url(https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTh8fGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D)",
@@ -57,16 +57,22 @@ console.log(isPlayerOver);
         >
           Task Management
         </h1>
-        <div className="w-10/12 mx-auto flex justify-between items-center">
+        <div className="w-10/12 mx-auto mt-5 flex justify-center md:justify-between items-center flex-wrap">
           <h1 className="text-2xl font-medium text-white">
-            Total Task : {alltask.length}
+          Previous Task : {alltask.length}
           </h1>
+          {
+            team.length?<h1 className="text-2xl font-medium text-white">
+            Ongoing Task : {team.length}
+            </h1>:""
+          }
+          
           <Link to="/dashboard/addtask">
             <button className="dashbord tracking-[2px]">Add Task</button>
           </Link>
         </div>
         <div className="p-[1px] my-3 bg-white w-11/12 mx-auto"></div>
-        <div className="w-11/12 mx-auto grid grid-cols-3 gap-5">
+        <div className="w-11/12 mx-auto md:grid grid-cols-3 gap-5">
           <div>
             <h1 className="text-xl font-medium text-center text-white">
               Previous tasks
