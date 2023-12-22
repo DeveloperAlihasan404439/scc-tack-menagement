@@ -55,8 +55,7 @@ export const router = createBrowserRouter([
         },
         {
           path: '/dashboard/updatedtask/:id',
-          element: <Updated/>,
-          loader: ({params})=>fetch(`https://task-management-server-teal.vercel.app/${params.id}`)
+          element: <Updated/>
         },
         {
           path: '/dashboard/users',

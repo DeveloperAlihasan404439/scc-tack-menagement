@@ -2,12 +2,18 @@ import { useForm } from "react-hook-form";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import useAxios from "../../Shere/Hoot/useAxios";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
 const Updated = () => {
   const axiosSecure = useAxios();
-  const loaderData = useLoaderData();
-  const {id} = useParams()
-console.log(id);
+  const [loaderData, setLoaderData] = useState({});
+  const { id } = useParams();
+  useEffect(() => {
+    axiosSecure.get(`/alltask/single/${id}`).then((result) => {
+      setLoaderData(result.data);
+    });
+  }, [axiosSecure, id]);
+  console.log(loaderData);
   const { _id, current_date, deadline, discription, priority, title } =
     loaderData;
   const navigate = useNavigate();
@@ -22,7 +28,7 @@ console.log(id);
     };
     if (_id) {
       axiosSecure.put(`/alltask/updated?id=${_id}`, updated).then((res) => {
-        if (res.data?.modifiedCount> 0) {
+        if (res.data?.modifiedCount > 0) {
           reset();
           navigate("/dashboard/alltask");
           Swal.fire({
