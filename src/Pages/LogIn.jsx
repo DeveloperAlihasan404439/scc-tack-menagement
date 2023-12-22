@@ -17,7 +17,7 @@ const LogIn = () => {
     loginUser(data.email, data.password).then((result) => {
       reset();
       if (result.user) {
-        navigate(location?.state ? location?.state : "/");
+        navigate(location.state?.from || "/");
         Swal.fire({
           position: "center",
           icon: "success",
@@ -33,14 +33,14 @@ const LogIn = () => {
   const googleLogin = () => {
     googleUser().then((result) => {
       if (result?.user) {
-        const userInfo = { 
+        const userInfo = {
           email: result.user?.email,
           name: result.user?.displayName,
           photo: result.user?.photoURL,
         };
         axiosSecure.post("/user", userInfo).then((res) => {
           if (res.data.insertedId) {
-            navigate(location?.state ? location?.state : "/");
+            navigate(location.state?.from || "/");
             Swal.fire({
               position: "center",
               icon: "success",
@@ -51,6 +51,16 @@ const LogIn = () => {
               timer: 2000,
             });
           }
+        });
+        navigate(location.state?.from || "/");
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Successfull Google Login",
+          showConfirmButton: false,
+          background: "#07163d",
+          color: "white",
+          timer: 2000,
         });
       }
     });

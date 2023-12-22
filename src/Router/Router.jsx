@@ -9,6 +9,8 @@ import AllTask from "../Pages/Dashboard/AllTask";
 import Profile from "../Pages/Dashboard/Profile";
 import Users from "../Pages/Dashboard/Users";
 import PriveatRout from "../Shere/Auth/PriveatRout";
+import Updated from "../Pages/Dashboard/Updated";
+import Contact from "../Pages/Contact";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +20,10 @@ export const router = createBrowserRouter([
         {
           path: '/',
           element: <Home/>
+        },
+        {
+          path: '/contact',
+          element: <Contact/>
         },
         {
           path: '/signUp',
@@ -46,6 +52,11 @@ export const router = createBrowserRouter([
         {
           path: '/dashboard/alltask',
           element: <PriveatRout><AllTask/></PriveatRout> 
+        },
+        {
+          path: '/dashboard/updatedtask/:id',
+          element: <Updated/>,
+          loader: ({params})=>fetch(`https://task-management-server-teal.vercel.app/${params.id}`)
         },
         {
           path: '/dashboard/users',

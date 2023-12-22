@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navber from "../Shere/Navber";
+import Fotter from "../companent/Fotter";
 
 
 const Main = () => {
@@ -7,6 +8,7 @@ const Main = () => {
         <div>
             <Navber/>
             <Outlet/>
+            <Fotter/>
         </div>
     );
 };
